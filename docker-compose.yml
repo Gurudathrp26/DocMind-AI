@@ -1,0 +1,36 @@
+services:
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "11434:11434"
+    # GPU (NVIDIA): uncomment
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [gpu]
+
+  backend:
+    build: ./backend
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      LLM_MODEL: llama3.2:3b
+      EMBED_MODEL: nomic-embed-text
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production-please-use-32-chars-min}
+    volumes:
+      - docmind-data:/data
+    depends_on:
+      - ollama
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  ollama:
+  docmind-data:

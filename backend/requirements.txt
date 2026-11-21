@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+python-multipart
+chromadb
+ollama
+pypdf
+python-docx
+sqlalchemy
+bcrypt
+PyJWT
+pydantic[email]
